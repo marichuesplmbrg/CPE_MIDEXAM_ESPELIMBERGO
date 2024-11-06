@@ -1,0 +1,40 @@
+---
+- hosts: all
+  become: true
+  pre_tasks:
+
+  - name: update repository undex / install Updates (CentOS)
+    tags: always
+    dnf: 
+      update_cache: yes
+    changed_when: false
+    when: ansible_distribution == "CentOS"
+
+  - name:  update repository undex / install Updates (CentOS)
+    tags: always
+    apt:
+      update_cache: yes
+    changed_when: false
+    when: ansible_distribution == "Ubuntu"
+
+- hosts: elasticsearch
+  become: true
+  roles:
+   - elasticsearch
+
+- hosts: kibana
+  become: true
+  roles:
+   - kibana
+
+- hosts: logstash
+  become: true
+  roles:
+   - logstash
+
+- name: Nagios Install
+  hosts: all
+  become: true
+  roles:
+   - nagios
+
